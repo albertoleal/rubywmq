@@ -219,8 +219,7 @@ module WMQ
   #   * Transmission Queue Header
   #   * ...
   class Message
-    attr_reader :data, :descriptor, :headers
-    attr_writer :data, :descriptor, :headers
+    attr_accessor  :data, :descriptor, :headers
   end
 
 end
