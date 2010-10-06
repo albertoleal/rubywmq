@@ -30,6 +30,35 @@ module WMQ
       end
     end
 
+
+    # Get all the messages from the Queue.
+    #
+    #   :queue_manager => 'BRAZIL.QM', 
+    #   :queue_name => 'GETBAN', 
+    #   :mode=>:input 
+    #
+    def self.get_all_messages(opts={})
+      connect_to_queue(opts) do |queue|
+        queue.each do |message|
+          yield message
+        end
+      end                    
+    end 
+
+    # Connect to the Queue in a single shot. 
+    #
+    #   :queue_manager => 'BRAZIL.QM', 
+    #   :queue_name => 'GETBAN', 
+    #   :mode=>:input 
+    #
+    def self.connect_to_queue(opts={})
+      WMQ::QueueManager.connect(:q_mgr_name => opts[:queue_manager]) do |qmgr|
+        qmgr.open_queue(:q_name=> opts[:queue_name], :mode => opts[:mode]) do |queue|
+          yield queue
+        end
+      end                    
+    end 
+
     # Execute any MQSC command against the queue manager
     #
     # Example
